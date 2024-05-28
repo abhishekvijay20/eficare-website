@@ -6,10 +6,6 @@ const FooterContainer = () => {
     >
       <div className="flex-1 flex flex-row items-start justify-start sm:flex-[unset] sm:self-stretch ex1:flex-[unset] ex1:self-stretch">
         <div className="flex-1 relative lg:text-lg md:text-mini sm:text-center">
-          {/* <p className="[margin-block-start:0] [margin-block-end:12px]">
-            Address: 2nd floor, J-204, Sopan-2, near Gayatri Temple, Highway,
-            Kalol, Gandhinagar, Gujarat - 382721
-          </p> */}
           <p className="[margin-block-start:0] [margin-block-end:12px]">
             Phone: (+91) 8511140111
           </p>
