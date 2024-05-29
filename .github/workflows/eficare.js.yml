@@ -38,6 +38,14 @@ jobs:
     - name: Archive production artifacts
       run: tar -czf server_build.tar.gz -C server .
 
+    - name: Debug SSH Key
+      run: |
+        echo "${{ secrets.DO_SSH_KEY }}" | head -c 100
+
+    - name: Debug SSH Key
+      run: |
+        echo "${{ secrets.DO_SSH_KEY }}" | head -c 100
+
     - name: Copy files via SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
@@ -47,7 +55,8 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        scp -o StrictHostKeyChecking=no server_build.tar.gz $SSH_USER@$SSH_HOST:/root/
+        ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+        scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa server_build.tar.gz $SSH_USER@$SSH_HOST:/root/
 
     - name: Deploy on DigitalOcean
       env:
@@ -55,9 +64,10 @@ jobs:
         SSH_HOST: 146.190.98.92
         SSH_USER: root
       run: |
-        ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-          cd /var/www/eficare
+        ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << 'EOF'
+          cd /var/www/html/your_project  # Adjust the path as needed
           tar -xzf /root/server_build.tar.gz -C .
-          cd /var/www/eficare
           npm install --production
-          EOF
+          pm2 start server.js
+          pm2 restart all
+        EO
