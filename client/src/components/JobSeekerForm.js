@@ -96,7 +96,7 @@ const JobSeekerForm = () => {
     }
 
     try {
-      await axios.post('http://www.eficare.net/api/v1/submit-job-seker-form', data);
+      await axios.post('/api/v1/submit-job-seker-form', data);
       setEmailSent(true);
     } catch (error) {
       console.error('Error submitting form:', error);
