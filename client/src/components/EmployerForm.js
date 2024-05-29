@@ -75,7 +75,7 @@ const EmployerForm = () => {
     setLoading(true);
     
     try {
-      await axios.post('/api/v1/submit-employer-form', formData);
+      await axios.post('http://159.65.140.114:5000/api/v1/submit-employer-form', formData);
       setEmailSent(true);
     } catch (error) {
       console.error('Error submitting form:', error);

@@ -96,7 +96,7 @@ const JobSeekerForm = () => {
     }
 
     try {
-      await axios.post('/api/v1/submit-job-seker-form', data);
+      await axios.post('http://159.65.140.114:5000/api/v1/submit-job-seker-form', data);
       setEmailSent(true);
     } catch (error) {
       console.error('Error submitting form:', error);
