@@ -61,6 +61,7 @@ jobs:
     - name: Deploy on DigitalOcean
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+        TRANSPORTER_PASSWORD: ${{ secrets.TRANSPORTER_PASSWORD }}
         SSH_HOST: 159.65.140.114
         SSH_USER: root
       run: |
