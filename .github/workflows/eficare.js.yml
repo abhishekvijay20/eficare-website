@@ -35,37 +35,36 @@ jobs:
       working-directory: server
       run: npm install
 
-    - name: Remove existing archive file and extracted files on DigitalOcean droplet
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 146.190.98.92
-        SSH_USER: root
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST 'rm -f /var/www/eficare/server_build.tar.gz && rm -rf /var/www/eficare/*'
-
     - name: Archive production artifacts
       run: tar -czf server_build.tar.gz -C server .
 
-    - name: Copy files via SSH
+    - name: Remove existing archive file and extracted files on DigitalOcean droplet
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 146.190.98.92
+        SSH_HOST: 159.65.140.114
         SSH_USER: root
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST 'rm -f /var/www/eficare/server_build.tar.gz && rm -rf /var/www/eficare/*'
+
+    - name: Copy files via SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+        SSH_HOST: 159.65.140.114
+        SSH_USER: root
+      run: |
         scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa server_build.tar.gz $SSH_USER@$SSH_HOST:/var/www/eficare
 
     - name: Deploy on DigitalOcean
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 146.190.98.92
+        SSH_HOST: 159.65.140.114
         SSH_USER: root
       run: |
         ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
-          # Commands to be executed on the remote server
           cd /var/www/eficare
           tar -xzf /root/server_build.tar.gz -C .
           npm install --production
