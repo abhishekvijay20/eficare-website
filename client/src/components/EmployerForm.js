@@ -75,7 +75,7 @@ const EmployerForm = () => {
     setLoading(true);
     
     try {
-      await axios.post('/api/v1/submit-employer-form', formData);
+      await axios.post('http://www.eficare.net/api/v1/submit-employer-form', formData);
       setEmailSent(true);
     } catch (error) {
       console.error('Error submitting form:', error);
