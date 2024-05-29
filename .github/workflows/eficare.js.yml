@@ -2,32 +2,62 @@ name: Eficare.js CI
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main  # Adjust the branch name as needed
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: |
-        cd client
-        npm i
-        npm run build
-        echo "Contents of client/build directory:"
-        ls -la build/
-        mv build/ ../server/static
-        echo "Contents of server directory after moving build:"
-        ls -la ../server/
-        echo "Contents of server/static directory:"
-        ls -la ../server/static
-        cd ../server
-        npm i
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # Adjust the Node.js version as needed
+
+    - name: Install dependencies for client
+      working-directory: client
+      run: npm install
+
+    - name: Build React app
+      working-directory: client
+      run: npm run build
+
+    - name: Rename build folder to static and move to server
+      run: |
+        rm -rf server/static         
+        mv client/build server/static
+
+    - name: Install dependencies for server
+      working-directory: server
+      run: npm install
+
+    - name: Archive production artifacts
+      run: tar -czf server_build.tar.gz -C server .
+
+    - name: Copy files via SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+        SSH_HOST: 146.190.98.92
+        SSH_USER: root
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        scp -o StrictHostKeyChecking=no server_build.tar.gz $SSH_USER@$SSH_HOST:/root/
+
+    - name: Deploy on DigitalOcean
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+        SSH_HOST: 146.190.98.92
+        SSH_USER: root
+      run: |
+        ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+          cd /var/www/eficare
+          tar -xzf /root/server_build.tar.gz -C .
+          cd /var/www/eficare
+          npm install --production
+          EOF
