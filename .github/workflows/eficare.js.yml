@@ -69,5 +69,5 @@ jobs:
           tar -xzf /var/www/eficare/server_build.tar.gz -C .
           npm install --production
           pm2 stop all
-          pm2 start server.js
+          pm2 server.js
         EOF
