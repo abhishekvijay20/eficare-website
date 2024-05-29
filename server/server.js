@@ -15,7 +15,7 @@ app.use(express.static('static'));
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Email configuration
+// Email configuration 
 const transporter = nodemailer.createTransport({
   service: "gmail", // or any other email service
   auth: {
