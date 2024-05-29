@@ -65,6 +65,7 @@ jobs:
         SSH_HOST: 159.65.140.114
         SSH_USER: root
       run: |
+        echo "$TRANSPORTER_PASSWORD" > /var/www/eficare/.env
         ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
           cd /var/www/eficare
           tar -xzf /var/www/eficare/server_build.tar.gz -C .
