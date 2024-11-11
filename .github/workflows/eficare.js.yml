@@ -41,7 +41,7 @@ jobs:
     - name: Remove existing archive file and extracted files on DigitalOcean droplet
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 178.128.95.69
+        SSH_HOST: 157.245.158.213
         SSH_USER: root
       run: |
         mkdir -p ~/.ssh
@@ -53,7 +53,7 @@ jobs:
     - name: Copy files via SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 178.128.95.69
+        SSH_HOST: 157.245.158.213
         SSH_USER: root
       run: |
         scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa server_build.tar.gz $SSH_USER@$SSH_HOST:/var/www/eficare
@@ -61,7 +61,7 @@ jobs:
     - name: Deploy on DigitalOcean
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 178.128.95.69
+        SSH_HOST: 157.245.158.213
         SSH_USER: root
       run: |
         ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
