@@ -50,6 +50,14 @@ jobs:
         ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST 'rm -f /var/www/eficare/server_build.tar.gz && rm -rf /var/www/eficare/*'
 
+    - name: Create directory on the server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+        SSH_HOST: 157.245.158.213  # Replace with your server's IP
+        SSH_USER: root
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST 'mkdir -p /var/www/eficare'
+  
     - name: Copy files via SSH
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
