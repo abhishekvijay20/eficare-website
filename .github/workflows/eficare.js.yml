@@ -66,16 +66,32 @@ jobs:
       run: |
         scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa server_build.tar.gz $SSH_USER@$SSH_HOST:/var/www/eficare
 
+    - name: Install Node.js, npm, and PM2
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+        SSH_HOST: 157.245.158.213  # Replace with your server's IP
+        SSH_USER: root
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
+        # Install Node.js and npm
+        curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+        apt-get install -y nodejs
+  
+        # Install PM2 globally
+        npm install -g pm2
+        EOF
+  
     - name: Deploy on DigitalOcean
       env:
         SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
-        SSH_HOST: 157.245.158.213
+        SSH_HOST: 157.245.158.213  # Replace with your server's IP
         SSH_USER: root
       run: |
-        ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
+          # Navigate to the project directory
           cd /var/www/eficare
-          tar -xzf /var/www/eficare/server_build.tar.gz -C .
-          npm install --production
-          pm2 stop all
-          pm2 start server.js
+          # Install dependencies and start the application with PM2
+          npm install
+          pm2 start server.js --name "eficare"
         EOF
+  
