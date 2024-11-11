@@ -1,3 +1,5 @@
+console.log("Starting server...");
+
 const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
