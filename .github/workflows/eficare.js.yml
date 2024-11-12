@@ -97,6 +97,7 @@ jobs:
         # Remove the tar.gz file to save space
         rm server_build.tar.gz
             
+        pm2 stop all
         pm2 start server.js --name "eficare"
         EOF
   
