@@ -88,10 +88,15 @@ jobs:
         SSH_USER: root
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $SSH_USER@$SSH_HOST << EOF
-          # Navigate to the project directory
-          cd /var/www/eficare
-          # Install dependencies and start the application with PM2
-          npm install
-          pm2 start server.js --name "eficare"
+        # Navigate to the project directory
+        cd /var/www/eficare
+        
+        # Unarchive the server files
+        tar -xzf server_build.tar.gz
+            
+        # Remove the tar.gz file to save space
+        rm server_build.tar.gz
+            
+        pm2 start server.js --name "eficare"
         EOF
   
