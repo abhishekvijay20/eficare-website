@@ -3,7 +3,7 @@ FROM node:20 AS build
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run build || (echo "BUILD FAILED" && ls -la && cat ./path-to-any-log-if-any && exit 1)
+RUN npm run build || (echo "❌ BUILD FAILED" && ls -la && echo "--- src ---" && ls -la src && echo "--- public ---" && ls -la public && echo "--- build (if any) ---" && ls -la build || true && exit 1)
 
 # Serve with nginx
 FROM nginx:alpine
