@@ -35,6 +35,19 @@ jobs:
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
 
+      - name: Copy files to the droplet
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
+          SSH_HOST: ${{ secrets.SERVER_IP }}
+          SSH_USER: root
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+          # Copy all the files (including docker-compose.yml and app source)
+          scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./ $SSH_USER@$SSH_HOST:/var/www/eficare
+
       - name: SSH to DigitalOcean and deploy
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_KEY }}
