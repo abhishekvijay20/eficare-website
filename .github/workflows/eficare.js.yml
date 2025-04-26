@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.DROPLET_USERNAME }}
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
             docker stop eficare-container || true
             docker rm eficare-container || true
-            docker run -d --name eficare-container -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
+            docker run -d --name eficare-container -p 80:3000 ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
