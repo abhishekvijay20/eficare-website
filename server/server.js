@@ -19,8 +19,9 @@ const upload = multer({ storage });
 
 // Email configuration 
 const transporter = nodemailer.createTransport({
-  service: "smtp-relay.brevo.com", 
-  port: 587,
+  host: "smtp-relay.brevo.com",  
+  port: 587,                    
+  secure: false, 
   auth: {
     user: process.env.TRANSPORTER_LOGIN,
     pass: process.env.TRANSPORTER_PASSWORD,
@@ -70,7 +71,8 @@ app.post(
 
 app.post("/api/v1/submit-employer-form", (req, res) => {
   const { companyName, email, contactNumber, website, description } = req.body;
-
+  console.log(req.body);
+  console.log(companyName, email, contactNumber);
   if (!companyName || !email || !contactNumber) {
     return res
       .status(400)
