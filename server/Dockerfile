@@ -1,5 +1,5 @@
 # Use Node image for running server
-FROM node:18-slim
+FROM node:18-alpine
 
 # Set working directory inside container
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose server port (change if your server uses different port)
-EXPOSE 3000
+EXPOSE 5000
 
 # Start the server
 CMD ["npm", "start"]
