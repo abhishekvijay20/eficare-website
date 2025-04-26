@@ -29,6 +29,9 @@ jobs:
           rm -rf server/build
           cp -r client/build server/build
 
+      - name: Set up environment variables
+        run: echo "TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }}" >> $GITHUB_ENV
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
