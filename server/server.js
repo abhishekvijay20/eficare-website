@@ -19,9 +19,10 @@ const upload = multer({ storage });
 
 // Email configuration 
 const transporter = nodemailer.createTransport({
-  service: "gmail", // or any other email service
+  service: "smtp-relay.brevo.com", 
+  port: 587,
   auth: {
-    user: "applications@eficare.net",
+    user: process.env.TRANSPORTER_LOGIN,
     pass: process.env.TRANSPORTER_PASSWORD,
   },
 });
