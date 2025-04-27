@@ -40,8 +40,10 @@ app.post(
       return res.status(400).json({ error: "These fields are required" });
     }
 
+    const mailID = req.body.email;
+
     const mailOptions = {
-      from: "applications@eficare.net",
+      from: mailID,
       to: "info@eficare.net",
       subject: "New Job Seeker Submission",
       text: `
@@ -81,8 +83,10 @@ app.post("/api/v1/submit-employer-form", (req, res) => {
       });
   }
 
+  const mailID = req.body.email;
+
   const mailOptions = {
-    from: "applications@eficare.net",
+    from: mailID,
     to: "info@eficare.net",
     subject: "New Employer Submission",
     text: `
@@ -107,7 +111,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// let's see github hosted runner
 const PORT = 5000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
