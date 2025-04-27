@@ -20,7 +20,7 @@ const upload = multer({ storage });
 // Email configuration 
 const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",  
-  port: 465,                    
+  port: 587,                    
   secure: false, 
   auth: {
     user: process.env.TRANSPORTER_LOGIN,
