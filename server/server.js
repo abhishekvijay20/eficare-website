@@ -28,6 +28,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error("Error connecting to SMTP server:", error);
+  } else {
+    console.log("SMTP server is ready to send emails!");
+  }
+});
+
 app.post(
   "/api/v1/submit-job-seker-form",
   upload.single("resume"),
