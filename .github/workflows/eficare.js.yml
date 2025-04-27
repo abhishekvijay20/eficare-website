@@ -29,11 +29,6 @@ jobs:
           rm -rf server/build
           cp -r client/build server/build
 
-      - name: Set up environment variables
-        run: |
-          echo "TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }}" >> $GITHUB_ENV
-          echo "TRANSPORTER_LOGIN=${{ secrets.TRANSPORTER_LOGIN }}" >> $GITHUB_ENV
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -68,5 +63,5 @@ jobs:
             docker ps -a | grep eficare-container && docker rm eficare-container || true
 
             docker run -d --name eficare-container -p 5000:5000 \
-              -e TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }} \
+              -e SENDGRID_API_KEY=${{ secrets.SENDGRID_API_KEY }} \
               ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
