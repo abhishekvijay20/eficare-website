@@ -19,11 +19,9 @@ const upload = multer({ storage });
 
 // Email configuration 
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",  
-  port: 587,                    
-  secure: false, 
+  service: "gmail",
   auth: {
-    user: process.env.TRANSPORTER_LOGIN,
+    user: "applications@eficare.net", 
     pass: process.env.TRANSPORTER_PASSWORD,
   },
 });
@@ -48,11 +46,10 @@ app.post(
       return res.status(400).json({ error: "These fields are required" });
     }
 
-    const mailID = req.body.email;
-
     const mailOptions = {
-      from: mailID,
-      to: "info@eficare.net",
+      from: { name: 'Eficare Applications', address: "applications@eficare.net" },
+      to: { name: 'Eficare Info', address: 'info@eficare.net' },
+      replyTo: email,
       subject: "New Job Seeker Submission",
       text: `
       Name: ${name}
@@ -91,11 +88,10 @@ app.post("/api/v1/submit-employer-form", (req, res) => {
       });
   }
 
-  const mailID = req.body.email;
-
   const mailOptions = {
-    from: mailID,
-    to: "info@eficare.net",
+    from: { name: 'Eficare Applications', address: "applications@eficare.net" },
+    to: { name: 'Eficare Info', address: 'info@eficare.net' },
+    replyTo: email,
     subject: "New Employer Submission",
     text: `
         Company Name: ${companyName}
