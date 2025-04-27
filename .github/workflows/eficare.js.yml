@@ -65,5 +65,5 @@ jobs:
             docker stop eficare-container || true
             docker rm eficare-container || true
             docker run --network host -d --name eficare-container -p 5000:5000 \
-            -e TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }} \
-            ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
+              -e TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }} \
+              ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}

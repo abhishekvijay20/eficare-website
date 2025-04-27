@@ -78,8 +78,7 @@ app.post(
 
 app.post("/api/v1/submit-employer-form", (req, res) => {
   const { companyName, email, contactNumber, website, description } = req.body;
-  console.log(req.body);
-  console.log(companyName, email, contactNumber);
+
   if (!companyName || !email || !contactNumber) {
     return res
       .status(400)
