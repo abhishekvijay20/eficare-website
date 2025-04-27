@@ -64,7 +64,7 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
             docker stop eficare-container || true
             docker rm eficare-container || true
-                  docker run -d --name eficare-container -p 5000:5000 \
+                  docker run --network host -d --name eficare-container -p 5000:5000 \
                   -e TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }} \
                   -e TRANSPORTER_LOGIN=${{ secrets.TRANSPORTER_LOGIN }} \
                   ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
