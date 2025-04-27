@@ -62,8 +62,11 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
-            docker stop eficare-container || true
-            docker rm eficare-container || true
+            
+            # Check if the container exists before stopping/removing
+            docker ps -a | grep eficare-container && docker stop eficare-container || true
+            docker ps -a | grep eficare-container && docker rm eficare-container || true
+
             docker run --network host -d --name eficare-container -p 5000:5000 \
               -e TRANSPORTER_PASSWORD=${{ secrets.TRANSPORTER_PASSWORD }} \
               ${{ secrets.DOCKER_USERNAME }}/eficare:${{ env.IMAGE_TAG }}
